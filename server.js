@@ -1,6 +1,7 @@
 // Import packages
 import express from "express";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 
 // Import files-functions
 import allRoutes from "./routes/index.js";
@@ -9,6 +10,15 @@ import allRoutes from "./routes/index.js";
 dotenv.config();
 
 const app = express();
+
+// Enable form data's conversion to json
+app.use(express.json());
+
+// Connect to MongoDB server
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then((res) => console.log("DB Connected"))
+  .catch((err) => console.log(err.message));
 
 // Attach all the routes
 app.use("/api", allRoutes);
