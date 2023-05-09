@@ -1,9 +1,27 @@
 // Import files-functions
 import User from "../models/user.js";
-import { encryptPassword, createJwt } from "../utils/auth.js";
+import { encryptPassword, matchPassword, createJwt } from "../utils/auth.js";
 
 export const loginUser = async (req, res) => {
-  res.send("Login User");
+  try {
+    if (!req.body.username || !req.body.password)
+      throw Error("Username or Password Incorrect");
+
+    const foundUser = (await User.find({ username: req.body.username }))[0];
+    if (!foundUser) throw Error("Username or Password Incorrect");
+
+    const passwordsMatch = matchPassword(req.body.password, foundUser.password);
+    if (!passwordsMatch) throw Error("Username or Password Incorrect");
+
+    const jwtToken = createJwt({ username: req.body.username });
+    foundUser.jet = jwtToken;
+    await foundUser.save();
+
+    res.status(200).json({ success: true, token: jwtToken });
+  } catch (err) {
+    console.log(err);
+    res.status(401).json(err.message);
+  }
 };
 
 export const signupUser = async (req, res) => {
