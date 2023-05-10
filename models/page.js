@@ -7,14 +7,13 @@ const pageSchema = new Schema({
     required: [true, "Title is required"],
   },
   content: String,
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "user",
-    required: [true, "Owner of page is required"],
+  username: {
+    type: String,
+    required: true,
   },
   note: {
     type: Schema.Types.ObjectId,
-    ref: "note",
+    ref: "Note",
     required: [true, "Related note is required"],
   },
 });

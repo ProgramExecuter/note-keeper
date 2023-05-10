@@ -9,13 +9,13 @@ const noteSchema = new Schema({
   description: String,
   user: {
     type: Schema.Types.ObjectId,
-    ref: "user",
+    ref: "User",
     required: [true, "Owner of note is required"],
   },
   pages: [
     {
       type: Schema.Types.ObjectId,
-      ref: "page",
+      ref: "Page",
     },
   ],
 });
