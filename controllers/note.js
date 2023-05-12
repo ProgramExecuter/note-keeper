@@ -25,7 +25,7 @@ export const createNewNote = async (req, res) => {
 
 export const getSingleNote = async (req, res) => {
   try {
-    const foundNote = await Note.findById(req.params.id);
+    const foundNote = await Note.findById(req.params.id).populate("pages");
 
     if (!foundNote) throw Error("Note not found");
 

@@ -7,9 +7,10 @@ const pageSchema = new Schema({
     required: [true, "Title is required"],
   },
   content: String,
-  username: {
-    type: String,
-    required: true,
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: [true, "Owner of page is required"],
   },
   note: {
     type: Schema.Types.ObjectId,
