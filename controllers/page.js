@@ -46,7 +46,27 @@ export const getSinglePage = async (req, res) => {
 };
 
 export const editPage = async (req, res) => {
-  res.send("Edit a page");
+  try {
+    const editedDetails = {};
+    if (req.body.title) editedDetails.title = req.body.title;
+    if (req.body.content) editedDetails.content = req.body.content;
+
+    const foundNote = await Note.findById(req.params.id, "pages");
+    if (!foundNote) throw Error("Note not found");
+
+    const pageId = foundNote.pages[req.params.page - 1];
+
+    const editedPage = await Page.findByIdAndUpdate(
+      pageId,
+      { $set: editedDetails },
+      { returnDocument: "after" }
+    );
+    if (!editedPage) throw Error("Page not found");
+
+    res.status(200).json({ success: false, page: editedPage });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
 };
 
 export const deletePage = async (req, res) => {
