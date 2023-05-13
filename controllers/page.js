@@ -70,5 +70,18 @@ export const editPage = async (req, res) => {
 };
 
 export const deletePage = async (req, res) => {
-  res.send("Delete page");
+  try {
+    const foundNote = await Note.findById(req.params.id, "pages");
+    if (!foundNote) throw Error("Note not found");
+
+    const pageId = foundNote.pages[req.params.page - 1];
+
+    const deletedPage = await Page.findByIdAndDelete(pageId, {
+      returnDocument: "after",
+    });
+
+    res.status(200).json({ success: true, page: deletedPage });
+  } catch (err) {
+    res.status(404).json({ success: false, error: err.message });
+  }
 };
